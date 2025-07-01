@@ -17,10 +17,10 @@ interface GoogleSignInButtonProps {
   style?: any;
 }
 
-export default function GoogleSignInButton({ 
-  onPress, 
-  disabled = false, 
-  style 
+export default function GoogleSignInButton({
+  onPress,
+  disabled = false,
+  style,
 }: GoogleSignInButtonProps) {
   const { signInWithGoogle, loading } = useAuth();
 
@@ -45,7 +45,7 @@ export default function GoogleSignInButton({
         <View style={styles.content}>
           <Image
             source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg'
+              uri: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
             }}
             style={styles.googleIcon}
           />

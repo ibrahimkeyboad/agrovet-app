@@ -8,7 +8,12 @@ import {
   Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, ShoppingCart, Truck, Headphones } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  ShoppingCart,
+  Truck,
+  Headphones,
+} from 'lucide-react-native';
 import { TouchableOpacity } from 'react-native';
 
 import Colors from '@/constants/Colors';
@@ -17,7 +22,7 @@ import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 
-export default function AuthScreen() {
+export default function LoginScreen() {
   const router = useRouter();
   const { user, error, clearError } = useAuth();
 
@@ -31,20 +36,15 @@ export default function AuthScreen() {
   // Show error if authentication fails
   useEffect(() => {
     if (error) {
-      Alert.alert(
-        'Authentication Error',
-        error.message,
-        [{ text: 'OK', onPress: clearError }]
-      );
+      Alert.alert('Authentication Error', error.message, [
+        { text: 'OK', onPress: clearError },
+      ]);
     }
   }, [error, clearError]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity 
-        onPress={() => router.back()}
-        style={styles.backButton}
-      >
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
         <ArrowLeft color={Colors.neutral[800]} size={24} />
       </TouchableOpacity>
 

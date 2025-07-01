@@ -8,10 +8,12 @@ import * as Linking from 'expo-linking';
 WebBrowser.maybeCompleteAuthSession();
 
 // Create redirect URL for the app
-const redirectTo = Platform.select({
-  web: `${window.location.origin}/auth/callback`,
-  default: Linking.createURL('/auth/callback'),
-});
+const redirectTo =
+  process.env.NODE_ENV === 'development'
+    ? `exp://192.168.0.105:8081/--/auth/callback`
+    : 'myapp://auth/callback';
+
+console.log(redirectTo);
 
 export class AuthService {
   /**
@@ -46,9 +48,11 @@ export class AuthService {
           // Extract the URL parameters and handle the auth callback
           const url = new URL(result.url);
           const params = new URLSearchParams(url.hash.substring(1));
-          
+
           if (params.get('error')) {
-            throw new Error(params.get('error_description') || 'Authentication failed');
+            throw new Error(
+              params.get('error_description') || 'Authentication failed'
+            );
           }
         }
       }
@@ -56,9 +60,10 @@ export class AuthService {
       return { data, error: null };
     } catch (error) {
       console.error('Google sign-in error:', error);
-      return { 
-        data: null, 
-        error: error instanceof Error ? error : new Error('Authentication failed') 
+      return {
+        data: null,
+        error:
+          error instanceof Error ? error : new Error('Authentication failed'),
       };
     }
   }
@@ -69,7 +74,7 @@ export class AuthService {
   static async signOut() {
     try {
       const { error } = await supabase.auth.signOut();
-      
+
       if (error) {
         throw error;
       }
@@ -77,8 +82,8 @@ export class AuthService {
       return { error: null };
     } catch (error) {
       console.error('Sign out error:', error);
-      return { 
-        error: error instanceof Error ? error : new Error('Sign out failed') 
+      return {
+        error: error instanceof Error ? error : new Error('Sign out failed'),
       };
     }
   }
@@ -88,8 +93,11 @@ export class AuthService {
    */
   static async getSession() {
     try {
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
       if (error) {
         throw error;
       }
@@ -97,9 +105,10 @@ export class AuthService {
       return { session, error: null };
     } catch (error) {
       console.error('Get session error:', error);
-      return { 
-        session: null, 
-        error: error instanceof Error ? error : new Error('Failed to get session') 
+      return {
+        session: null,
+        error:
+          error instanceof Error ? error : new Error('Failed to get session'),
       };
     }
   }
@@ -109,8 +118,11 @@ export class AuthService {
    */
   static async getUser() {
     try {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
       if (error) {
         throw error;
       }
@@ -118,9 +130,9 @@ export class AuthService {
       return { user, error: null };
     } catch (error) {
       console.error('Get user error:', error);
-      return { 
-        user: null, 
-        error: error instanceof Error ? error : new Error('Failed to get user') 
+      return {
+        user: null,
+        error: error instanceof Error ? error : new Error('Failed to get user'),
       };
     }
   }
@@ -131,7 +143,7 @@ export class AuthService {
   static async refreshSession() {
     try {
       const { data, error } = await supabase.auth.refreshSession();
-      
+
       if (error) {
         throw error;
       }
@@ -139,9 +151,12 @@ export class AuthService {
       return { data, error: null };
     } catch (error) {
       console.error('Refresh session error:', error);
-      return { 
-        data: null, 
-        error: error instanceof Error ? error : new Error('Failed to refresh session') 
+      return {
+        data: null,
+        error:
+          error instanceof Error
+            ? error
+            : new Error('Failed to refresh session'),
       };
     }
   }
