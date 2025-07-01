@@ -3,17 +3,23 @@ import { AuthError } from '@supabase/supabase-js';
 import { Platform } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
+import Constants from 'expo-constants';
 
 // Configure WebBrowser for auth redirects
 WebBrowser.maybeCompleteAuthSession();
 
 // Create redirect URL for the app
-const redirectTo =
-  process.env.NODE_ENV === 'development'
-    ? Linking.createURL('/auth/callback')
-    : 'myapp://auth/callback';
+const getRedirectUrl = () => {
+  if (Platform.OS === 'web') {
+    // For web, use the current origin with the callback path
+    return `${window.location.origin}/auth/callback`;
+  } else {
+    // For mobile, use the custom scheme
+    return Linking.createURL('/auth/callback');
+  }
+};
 
-console.log(redirectTo);
+console.log('Redirect URL:', getRedirectUrl());
 
 export class AuthService {
   /**
@@ -21,6 +27,8 @@ export class AuthService {
    */
   static async signInWithGoogle() {
     try {
+      const redirectTo = getRedirectUrl();
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
