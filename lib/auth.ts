@@ -10,7 +10,7 @@ WebBrowser.maybeCompleteAuthSession();
 // Create redirect URL for the app
 const redirectTo =
   process.env.NODE_ENV === 'development'
-    ? `exp://192.168.0.105:8081/--/auth/callback`
+    ? Linking.createURL('/auth/callback')
     : 'myapp://auth/callback';
 
 console.log(redirectTo);
