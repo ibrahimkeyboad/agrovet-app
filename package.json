@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "expo start",
+    "dev": "expo start",
     "pro": "EXPO_ATLAS=true npx expo start --no-dev",
-    "dev": "EXPO_ATLAS=true npx expo start",
+    "start": "EXPO_ATLAS=true npx expo start",
     "build:web": "expo export --platform web",
     "lint": "expo lint"
   },
